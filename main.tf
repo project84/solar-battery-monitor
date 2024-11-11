@@ -23,3 +23,9 @@ resource "docker_container" "nginx" {
     external = 8000
   }
 }
+
+provider "aws" {
+  shared_config_files      = ["/Users/tf_user/.aws/conf"]
+  shared_credentials_files = ["/Users/tf_user/.aws/creds"]
+  region                   = "eu-west-1"
+}
