@@ -93,7 +93,5 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 
 
 provider "aws" {
-  shared_config_files      = ["/Users/phil/.aws/config"]
-  shared_credentials_files = ["/Users/phil/.aws/credentials"]
   region                   = "eu-west-1"
 }
