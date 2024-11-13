@@ -7,7 +7,7 @@ resource "docker_image" "nginx" {
 
 resource "docker_container" "nginx" {
   image = docker_image.nginx.image_id
-  name  = "tutorial"
+  name  = "deploy"
 
   ports {
     internal = 80
@@ -36,7 +36,7 @@ resource "aws_s3_bucket_acl" "lambda_bucket" {
 data "archive_file" "lambda_monitor_alerts" {
   type = "zip"
 
-  source_dir  = "${path.module}/monitor-alerts"
+  source_dir  = "${path.module}/dist"
   output_path = "${path.module}/bundle/monitor-alerts.zip"
 }
 
