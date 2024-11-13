@@ -1,0 +1,6 @@
+{
+  "name": "solar-battery-monitor",
+  "version": "1.0.0",
+  "description": "IaC tools for monitoring a solar battery status",
+  "license": "GPL-3.0-or-later"
+}
