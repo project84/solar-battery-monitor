@@ -8,25 +8,25 @@ import {
 
 @injectable()
 export class HttpService {
-  get(url: string, options: IMakeRequestOptionsBase) {
+  get(url: string, options?: IMakeRequestOptionsBase) {
     return this.submit(HttpRequestMethod.Get, url, options);
   }
 
-  post(url: string, body: unknown, options: IMakeRequestOptionsBase) {
+  post(url: string, body: unknown, options: IMakeRequestOptionsBase = {}) {
     return this.submit(HttpRequestMethod.Post, url, {
       body,
       ...options,
     });
   }
 
-  patch(url: string, body: unknown, options: IMakeRequestOptionsBase) {
+  patch(url: string, body: unknown, options: IMakeRequestOptionsBase = {}) {
     return this.submit(HttpRequestMethod.Patch, url, {
       body,
       ...options,
     });
   }
 
-  delete(url: string, options: IMakeRequestOptionsBase) {
+  delete(url: string, options: IMakeRequestOptionsBase = {}) {
     return this.submit(HttpRequestMethod.Delete, url, options);
   }
 
