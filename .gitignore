@@ -36,4 +36,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Output directory for bundled lambda code
 bundle
+dist
+
+# JS / TS
+node_modules
