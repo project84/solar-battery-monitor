@@ -2,5 +2,8 @@
   "name": "solar-battery-monitor",
   "version": "1.0.0",
   "description": "IaC tools for monitoring a solar battery status",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
 }
