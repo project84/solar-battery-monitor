@@ -52,13 +52,13 @@ export class GivenergyService {
     {
       platforms = [GivenergyNotificationPlatform.Push],
       icon = GivenergyNotificationIcon.Alert,
-    }: {
+    }: Partial<{
       platforms: GivenergyNotificationPlatform[];
       icon: GivenergyNotificationIcon;
-    },
+    }> = {},
   ) {
     await this.http.post<ISendGivenergyNotificationResponse>(
-      this.baseUrl,
+      `${this.baseUrl}/notification/send`,
       {
         title,
         body,
@@ -67,7 +67,7 @@ export class GivenergyService {
       },
       {
         headers: await this.getAuthorizationHeader(
-          GivenergyAccessToken.ReadEvents,
+          GivenergyAccessToken.SendNotification,
         ),
       },
     );
