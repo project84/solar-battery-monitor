@@ -61,6 +61,8 @@ resource "aws_lambda_function" "monitor_alerts" {
   source_code_hash = data.archive_file.lambda_monitor_alerts.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+
+  timeout = 60
 }
 
 resource "aws_cloudwatch_log_group" "monitor_alerts" {
@@ -70,7 +72,7 @@ resource "aws_cloudwatch_log_group" "monitor_alerts" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_lambda"
+  name = "monitor_alerts_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -86,9 +88,27 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
+data "aws_iam_policy_document" "policy" {
+  statement {
+    effect    = "Allow"
+    actions   = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "ssm:GetParameter"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "monitor-alerts-policy"
+  policy      = data.aws_iam_policy_document.policy.json
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
   role       = aws_iam_role.lambda_exec.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = aws_iam_policy.policy.arn
 }
 
 
