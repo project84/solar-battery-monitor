@@ -8,26 +8,26 @@ import {
 
 @injectable()
 export class HttpService {
-  get(url: string, options?: IMakeRequestOptionsBase) {
-    return this.submit(HttpRequestMethod.Get, url, options);
+  get<T>(url: string, options?: IMakeRequestOptionsBase) {
+    return this.submit<T>(HttpRequestMethod.Get, url, options);
   }
 
-  post(url: string, body: unknown, options: IMakeRequestOptionsBase = {}) {
-    return this.submit(HttpRequestMethod.Post, url, {
+  post<T>(url: string, body: unknown, options: IMakeRequestOptionsBase = {}) {
+    return this.submit<T>(HttpRequestMethod.Post, url, {
       body,
       ...options,
     });
   }
 
-  patch(url: string, body: unknown, options: IMakeRequestOptionsBase = {}) {
-    return this.submit(HttpRequestMethod.Patch, url, {
+  patch<T>(url: string, body: unknown, options: IMakeRequestOptionsBase = {}) {
+    return this.submit<T>(HttpRequestMethod.Patch, url, {
       body,
       ...options,
     });
   }
 
-  delete(url: string, options: IMakeRequestOptionsBase = {}) {
-    return this.submit(HttpRequestMethod.Delete, url, options);
+  delete<T>(url: string, options: IMakeRequestOptionsBase = {}) {
+    return this.submit<T>(HttpRequestMethod.Delete, url, options);
   }
 
   private async submit<T>(
