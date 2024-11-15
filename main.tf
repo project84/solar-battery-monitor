@@ -124,6 +124,13 @@ resource "aws_cloudwatch_event_target" "lambda_target" {
   arn       = aws_lambda_function.monitor_alerts.arn
 }
 
+resource "aws_lambda_permission" "allow_eventbridge" {
+  statement_id  = "AllowExecutionFromEventBridge"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.monitor_alerts.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.every_30_minutes.arn
+}
 
 provider "aws" {
   region                   = "eu-west-1"
