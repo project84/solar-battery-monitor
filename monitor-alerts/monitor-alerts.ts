@@ -12,8 +12,6 @@ export const handler = async () => {
     roundingMethod: 'floor',
   });
 
-  console.log(referenceDateTime.toISOString());
-
   await AwsSystemManagerProvider();
   await GivenergyProvider();
 
