@@ -61,6 +61,8 @@ resource "aws_lambda_function" "monitor_alerts" {
   source_code_hash = data.archive_file.lambda_monitor_alerts.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+
+  timeout = 60
 }
 
 resource "aws_cloudwatch_log_group" "monitor_alerts" {
@@ -70,7 +72,7 @@ resource "aws_cloudwatch_log_group" "monitor_alerts" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_lambda"
+  name = "monitor_alerts_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -86,12 +88,50 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_policy" {
-  role       = aws_iam_role.lambda_exec.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+data "aws_iam_policy_document" "policy" {
+  statement {
+    effect    = "Allow"
+    actions   = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "ssm:GetParameter"
+    ]
+    resources = ["*"]
+  }
 }
 
+resource "aws_iam_policy" "policy" {
+  name        = "monitor-alerts-policy"
+  policy      = data.aws_iam_policy_document.policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_policy" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.policy.arn
+}
+
+resource "aws_cloudwatch_event_rule" "every_15_minutes" {
+  name        = "every_15_minutes_rule"
+  description = "trigger lambda every 15 minutes"
+
+  schedule_expression = "cron(*/15 * * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "lambda_target" {
+  rule      = aws_cloudwatch_event_rule.every_15_minutes.name
+  target_id = "SendToLambda"
+  arn       = aws_lambda_function.monitor_alerts.arn
+}
+
+resource "aws_lambda_permission" "allow_eventbridge" {
+  statement_id  = "AllowExecutionFromEventBridge"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.monitor_alerts.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.every_15_minutes.arn
+}
 
 provider "aws" {
-  region                   = "eu-west-1"
+  region = "eu-west-1"
 }
