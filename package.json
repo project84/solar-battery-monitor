@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.687.0",
+    "date-fns": "^4.1.0",
     "node-fetch": "^3.3.2",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0"
