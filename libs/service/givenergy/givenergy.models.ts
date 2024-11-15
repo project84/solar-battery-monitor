@@ -35,7 +35,7 @@ export interface IGivenergyInverterEventsResponse
 
 export enum GivenergyNotificationPlatform {
   Push = 'push',
-  Platform = 'platform',
+  Persist = 'persist',
 }
 
 export enum GivenergyNotificationIcon {
