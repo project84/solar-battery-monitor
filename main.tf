@@ -111,6 +111,19 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
   policy_arn = aws_iam_policy.policy.arn
 }
 
+resource "aws_cloudwatch_event_rule" "every_30_minutes" {
+  name        = "every_30_minutes_rule"
+  description = "trigger lambda every 30 minutes"
+
+  schedule_expression = "rate(30 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "lambda_target" {
+  rule      = aws_cloudwatch_event_rule.every_30_minutes.name
+  target_id = "SendToLambda"
+  arn       = aws_lambda_function.monitor_alerts.arn
+}
+
 
 provider "aws" {
   region                   = "eu-west-1"
