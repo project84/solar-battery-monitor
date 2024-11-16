@@ -1,4 +1,4 @@
-import { compareAsc, roundToNearestMinutes } from 'date-fns';
+import { compareAsc, roundToNearestMinutes, sub } from 'date-fns';
 import 'reflect-metadata';
 import { container } from 'tsyringe';
 import { AwsSystemManagerProvider } from '../libs/ioc/providers/aws.provider';
@@ -7,10 +7,15 @@ import { GivenergyNotificationPlatform } from '../libs/service/givenergy/givener
 import { GivenergyService } from '../libs/service/givenergy/givenergy.service';
 
 export const handler = async () => {
-  const referenceDateTime = roundToNearestMinutes(new Date(), {
-    nearestTo: 15,
-    roundingMethod: 'floor',
-  });
+  const referenceDateTime = sub(
+    roundToNearestMinutes(new Date(), {
+      nearestTo: 15,
+      roundingMethod: 'floor',
+    }),
+    {
+      minutes: 15,
+    },
+  );
 
   await AwsSystemManagerProvider();
   await GivenergyProvider();
