@@ -55,7 +55,7 @@ resource "aws_lambda_function" "monitor_alerts" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.lambda_monitor_alerts.key
 
-  runtime = "nodejs20.x"
+  runtime = "nodejs24.x"
   handler = "monitor-alerts.handler"
 
   source_code_hash = data.archive_file.lambda_monitor_alerts.output_base64sha256
